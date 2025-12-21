@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Chat App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="login-container" id="loginContainer">
+            <h2>Join Chat</h2>
+            <input type="text" id="usernameInput" placeholder="Enter your username" required>
+            <button id="joinBtn">Join</button>
+        </div>
+
+        <div class="chat-container" id="chatContainer" style="display: none;">
+            <div class="sidebar">
+                <div class="user-info">
+                    <h3 id="currentUser"></h3>
+                    <div class="presence-indicator">
+                        <span id="onlineCount">0</span> online
+                    </div>
+                </div>
+
+                <div class="room-list">
+                    <h4>Chat Rooms</h4>
+                    <ul id="roomList">
+                        <li class="room-item active" data-room="general">General</li>
+                        <li class="room-item" data-room="random">Random</li>
+                        <li class="room-item" data-room="tech">Tech</li>
+                    </ul>
+                </div>
+
+                <div class="private-chats">
+                    <h4>Private Chats</h4>
+                    <ul id="privateList"></ul>
+                    <input type="text" id="privateUserInput" placeholder="Start private chat">
+                    <button id="startPrivateBtn">Start Chat</button>
+                </div>
+
+                <div class="online-users">
+                    <h4>Online Users</h4>
+                    <ul id="userList"></ul>
+                </div>
+            </div>
+
+            <div class="chat-area">
+                <div class="chat-header">
+                    <h3 id="currentRoom">General</h3>
+                    <div class="room-users">
+                        <span id="roomUserCount">0</span> users
+                    </div>
+                </div>
+
+                <div class="messages" id="messages"></div>
+
+                <div class="message-input">
+                    <input type="text" id="messageInput" placeholder="Type a message...">
+                    <input type="file" id="fileInput" style="display: none;">
+                    <button id="fileBtn">📎</button>
+                    <button id="sendBtn">Send</button>
+                </div>
+
+                <div class="typing-indicator" id="typingIndicator"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
