@@ -1,4 +1,3 @@
-/* Global Reset */
 * {
     margin: 0;
     padding: 0;
@@ -26,7 +25,6 @@ body {
     flex-direction: column;
 }
 
-/* Login Container */
 .login-container {
     display: flex;
     flex-direction: column;
@@ -74,13 +72,11 @@ body {
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
-/* Chat Container */
 .chat-container {
     display: flex;
     height: 600px;
 }
 
-/* Sidebar */
 .sidebar {
     width: 300px;
     background: #f8f9fa;
@@ -162,7 +158,6 @@ body {
     background: #5a67d8;
 }
 
-/* Chat Area */
 .chat-area {
     flex: 1;
     display: flex;
@@ -241,7 +236,6 @@ body {
     margin-top: 5px;
 }
 
-/* Message Input */
 .message-input {
     padding: 15px 20px;
     background: #f8f9fa;
@@ -288,7 +282,6 @@ body {
     background: #45a049;
 }
 
-/* Typing Indicator */
 .typing-indicator {
     padding: 5px 20px;
     font-size: 14px;
@@ -296,7 +289,6 @@ body {
     font-style: italic;
 }
 
-/* Notifications */
 .notification {
     background: #ff9800;
     color: white;
@@ -307,7 +299,6 @@ body {
     font-size: 14px;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .chat-container {
         flex-direction: column;
@@ -361,3 +352,4 @@ body {
         padding: 10px;
     }
 }
+
