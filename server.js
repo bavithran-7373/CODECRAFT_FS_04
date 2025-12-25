@@ -7,15 +7,12 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-// Serve static files
 app.use(express.static(path.join(__dirname, '/')));
 
-// Store active users and chat history
 let users = {};
 let chatHistory = {};
 let privateChats = {};
 
-// Socket.io connection handling
 io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
@@ -28,7 +25,6 @@ io.on('connection', (socket) => {
         console.log(`${username} joined the chat`);
     });
 
-    // Join a chat room
     socket.on('joinRoom', (roomName) => {
         socket.join(roomName);
         if (!chatHistory[roomName]) {
@@ -38,13 +34,11 @@ io.on('connection', (socket) => {
         socket.to(roomName).emit('userJoinedRoom', { username: socket.username, room: roomName });
     });
 
-    // Leave a chat room
     socket.on('leaveRoom', (roomName) => {
         socket.leave(roomName);
         socket.to(roomName).emit('userLeftRoom', { username: socket.username, room: roomName });
     });
 
-    // Send message to room
     socket.on('sendMessage', (data) => {
         const message = {
             username: socket.username,
@@ -57,14 +51,12 @@ io.on('connection', (socket) => {
             chatHistory[data.room].push(message);
             io.to(data.room).emit('message', message);
         } else {
-            // Private message
             const recipientSocket = Object.keys(users).find(key => users[key] === data.to);
             if (recipientSocket) {
                 const privateMessage = { ...message, to: data.to, from: socket.username };
                 io.to(recipientSocket).emit('privateMessage', privateMessage);
                 socket.emit('privateMessage', privateMessage);
 
-                // Store private chat history
                 const chatKey = [socket.username, data.to].sort().join('-');
                 if (!privateChats[chatKey]) {
                     privateChats[chatKey] = [];
@@ -74,7 +66,6 @@ io.on('connection', (socket) => {
         }
     });
 
-    // File sharing
     socket.on('sendFile', (data) => {
         const fileMessage = {
             username: socket.username,
@@ -88,7 +79,6 @@ io.on('connection', (socket) => {
             chatHistory[data.room].push(fileMessage);
             io.to(data.room).emit('fileMessage', fileMessage);
         } else {
-            // Private file
             const recipientSocket = Object.keys(users).find(key => users[key] === data.to);
             if (recipientSocket) {
                 io.to(recipientSocket).emit('privateFile', fileMessage);
@@ -97,18 +87,15 @@ io.on('connection', (socket) => {
         }
     });
 
-    // Typing indicator
     socket.on('typing', (data) => {
         socket.to(data.room || data.to).emit('userTyping', { username: socket.username, isTyping: data.isTyping });
     });
 
-    // Get private chat history
     socket.on('getPrivateHistory', (withUser) => {
         const chatKey = [socket.username, withUser].sort().join('-');
         socket.emit('privateHistory', privateChats[chatKey] || []);
     });
 
-    // User disconnects
     socket.on('disconnect', () => {
         if (users[socket.id]) {
             const username = users[socket.id];
@@ -124,3 +111,4 @@ const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
