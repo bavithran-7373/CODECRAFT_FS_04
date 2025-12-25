@@ -3,7 +3,7 @@ let currentUser = '';
 let currentRoom = 'general';
 let currentPrivateChat = null;
 
-// DOM elements
+
 const loginContainer = document.getElementById('loginContainer');
 const chatContainer = document.getElementById('chatContainer');
 const usernameInput = document.getElementById('usernameInput');
@@ -24,7 +24,7 @@ const onlineCount = document.getElementById('onlineCount');
 const roomUserCount = document.getElementById('roomUserCount');
 const typingIndicator = document.getElementById('typingIndicator');
 
-// Join chat
+
 joinBtn.addEventListener('click', () => {
     const username = usernameInput.value.trim();
     if (username) {
@@ -37,7 +37,7 @@ joinBtn.addEventListener('click', () => {
     }
 });
 
-// Send message
+
 sendBtn.addEventListener('click', sendMessage);
 messageInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
@@ -60,7 +60,7 @@ function sendMessage() {
     }
 }
 
-// File sharing
+
 fileBtn.addEventListener('click', () => {
     fileInput.click();
 });
@@ -85,7 +85,7 @@ fileInput.addEventListener('change', (e) => {
     }
 });
 
-// Room switching
+
 roomList.addEventListener('click', (e) => {
     if (e.target.classList.contains('room-item')) {
         const roomName = e.target.dataset.room;
@@ -101,19 +101,19 @@ function switchRoom(roomName) {
     messages.innerHTML = '';
     socket.emit('joinRoom', roomName);
 
-    // Update active room in UI
+    
     document.querySelectorAll('.room-item').forEach(item => {
         item.classList.remove('active');
     });
     document.querySelector(`[data-room="${roomName}"]`).classList.add('active');
 
-    // Update private chat UI
+    
     document.querySelectorAll('.private-item').forEach(item => {
         item.classList.remove('active');
     });
 }
 
-// Private chat
+
 startPrivateBtn.addEventListener('click', () => {
     const username = privateUserInput.value.trim();
     if (username && username !== currentUser) {
@@ -136,7 +136,6 @@ function startPrivateChat(username) {
     messages.innerHTML = '';
     socket.emit('getPrivateHistory', username);
 
-    // Update active private chat in UI
     document.querySelectorAll('.room-item').forEach(item => {
         item.classList.remove('active');
     });
@@ -147,7 +146,7 @@ function startPrivateChat(username) {
     if (privateItem) {
         privateItem.classList.add('active');
     } else {
-        // Add to private list if not exists
+
         const li = document.createElement('li');
         li.className = 'private-item active';
         li.dataset.user = username;
@@ -156,7 +155,7 @@ function startPrivateChat(username) {
     }
 }
 
-// Typing indicator
+
 let typingTimer;
 messageInput.addEventListener('input', () => {
     socket.emit('typing', { isTyping: true, room: currentRoom, to: currentPrivateChat });
@@ -166,7 +165,6 @@ messageInput.addEventListener('input', () => {
     }, 1000);
 });
 
-// Socket event listeners
 socket.on('message', (data) => {
     displayMessage(data, false);
 });
@@ -175,7 +173,6 @@ socket.on('privateMessage', (data) => {
     if (data.from === currentPrivateChat || data.to === currentPrivateChat) {
         displayMessage(data, data.from === currentUser);
     }
-    // Add notification for private messages
     if (data.from !== currentUser && (data.from !== currentPrivateChat && data.to !== currentPrivateChat)) {
         showNotification(`New private message from ${data.from}`);
     }
@@ -253,7 +250,6 @@ socket.on('userTyping', (data) => {
     }
 });
 
-// Helper functions
 function displayMessage(data, isOwn) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${isOwn ? 'own' : 'other'}`;
@@ -292,8 +288,6 @@ function updateUserList(users) {
 }
 
 function updateRoomUsers() {
-    // This would require server-side tracking of room users
-    // For now, we'll just show the total online count
     roomUserCount.textContent = onlineCount.textContent;
 }
 
@@ -306,3 +300,4 @@ function showNotification(message) {
         notification.remove();
     }, 5000);
 }
+
